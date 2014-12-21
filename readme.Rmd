@@ -1,0 +1,147 @@
+---
+title: "run_analysis"
+output: html_document
+---
+## Project Overview
+run_analysis.R script is for JH - Getting and Cleaning Data Class Project
+
+## Source Information:
+
+This is data about wearable compuring.  This is a up and coming industry/technology.  Companies like Fitbit, Nike, and Jawbone Up are working on this technology.
+The source data from a study collected from accelerometers from the Samsung Galaxy S smartphone.  A full description is available at the following website:
+
+http://archive.ics.uci.edu/ml/datasets/Human+Activity+Recognition+Using+Smartphones 
+
+## Orginal Data:  
+
+The original data was sourced from 
+https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip 
+
+## Processing Explanation
+
+The entire process is contained in run_analysis.R
+
+1.  The original data set was downloaded and unzipped
+2.  The date/time of the download was recorded
+3.  The data from the test data subjects was read in
+    3 files, X_test.txt, y_test.txt, subject_test.txt
+4.  The data was combined into a single file
+5.  The data from the train data subjects was read in
+    3 files, X_train.txt, y_train.txt, subject_train.txt
+6.  The data was combined into a single file 
+7.  The data from the Training and Text is merged together
+NOTE:  all interim data is removed for cleanup
+8.  The features.txt file is read in and the feature names are put in a vector
+9.  The Activity and Subject column names are added to the vector
+10. The vector is used to name all the columns in the data set
+11. The data set is subsetted to all the columns that are using mean or standard
+deviation.   In addition, the Activity and Subject columns are included
+12. The Activities file is read in, this will provide the Activity descriptions
+13. The Activities description are merged into the data set
+14. The activity index is removed, and the column name is cleaned up
+NOTE:  The data is now fully assembled.  A great diagram of how this is assembled can be found at https://coursera-forum-screenshots.s3.amazonaws.com/ab/a2776024af11e4a69d5576f8bc8459/Slide2.png  compliments of David Hood.
+15. The data frame is put in a data table to used the dplyr package for group/sum
+16. Data is grouped by Activity and Subject, and the mean is calcuated for each colum
+17. The final data is written out a text file named ActivitySummary.txt
+
+
+## Data Dictionary 
+The data is primarily source from the original features_info.txt file provided in the original data set.  
+
+The features selected for this database come from the accelerometer and gyroscope 3-axial raw signals tAcc-XYZ and tGyro-XYZ. These time domain signals (prefix 't' to denote time) were captured at a constant rate of 50 Hz. Then they were filtered using a median filter and a 3rd order low pass Butterworth filter with a corner frequency of 20 Hz to remove noise. Similarly, the acceleration signal was then separated into body and gravity acceleration signals (tBodyAcc-XYZ and tGravityAcc-XYZ) using another low pass Butterworth filter with a corner frequency of 0.3 Hz.
+
+Subsequently, the body linear acceleration and angular velocity were derived in time to obtain Jerk signals (tBodyAccJerk-XYZ and tBodyGyroJerk-XYZ). Also the magnitude of these three-dimensional signals were calculated using the Euclidean norm (tBodyAccMag, tGravityAccMag, tBodyAccJerkMag, tBodyGyroMag, tBodyGyroJerkMag).
+
+Finally a Fast Fourier Transform (FFT) was applied to some of these signals producing fBodyAcc-XYZ, fBodyAccJerk-XYZ, fBodyGyro-XYZ, fBodyAccJerkMag, fBodyGyroMag, fBodyGyroJerkMag. (Note the 'f' to indicate frequency domain signals).
+
+These signals were used to estimate variables of the feature vector for each pattern:
+'-XYZ' is used to denote 3-axial signals in the X, Y and Z directions.
+
+We have reduced the original data set to include only mean "mean()"" and standard deviation "std()" variables from this data set.
+
+The activity and subject information was merged into the final data set.
+
+The following is the data in the final data set:
+
+1. Activity - Decription of the activities the subject was performing during the measurement.  Valid values include (WALKING, WALKING_UPSTAIRS, WALKING_DOWNSTAIRS, SITTING, STANDING, LAYING)
+2. Subject - The subject/person identifier
+3. tBodyAcc-mean()-X
+4. tBodyAcc-mean()-Y
+5. tBodyAcc-mean()-Z
+6. tBodyAcc-std()-X
+7. tBodyAcc-std()-Y
+8. tBodyAcc-std()-Z
+9. tGravityAcc-mean()-X
+10. tGravityAcc-mean()-Y
+11. tGravityAcc-mean()-Z
+12. tGravityAcc-std()-X
+13. tGravityAcc-std()-Y
+14. tGravityAcc-std()-Z
+15. tBodyAccJerk-mean()-X
+16. tBodyAccJerk-mean()-Y
+17. tBodyAccJerk-mean()-Z
+18. tBodyAccJerk-std()-X
+19. tBodyAccJerk-std()-Y
+20. tBodyAccJerk-std()-Z
+21. tBodyGyro-mean()-X
+22. tBodyGyro-mean()-Y
+23. tBodyGyro-mean()-Z
+24. tBodyGyro-std()-X
+25. tBodyGyro-std()-Y
+26. tBodyGyro-std()-Z
+27. tBodyGyroJerk-mean()-X
+28. tBodyGyroJerk-mean()-Y
+29. tBodyGyroJerk-mean()-Z
+30. tBodyGyroJerk-std()-X
+31. tBodyGyroJerk-std()-Y
+32. tBodyGyroJerk-std()-Z
+33. tBodyAccMag-mean()
+34. tBodyAccMag-std()
+35. tGravityAccMag-mean()
+36. tGravityAccMag-std()
+37. tBodyAccJerkMag-mean()
+38. tBodyAccJerkMag-std()
+39. tBodyGyroMag-mean()
+40. tBodyGyroMag-std()
+41. tBodyGyroJerkMag-mean()
+42. tBodyGyroJerkMag-std()
+43. fBodyAcc-mean()-X
+44. fBodyAcc-mean()-Y
+45. fBodyAcc-mean()-Z
+46. fBodyAcc-std()-X
+47. fBodyAcc-std()-Y
+49. fBodyAcc-std()-Z
+50. fBodyAcc-meanFreq()-X
+51. fBodyAcc-meanFreq()-Y
+52. fBodyAcc-meanFreq()-Z
+53. fBodyAccJerk-mean()-X
+54. fBodyAccJerk-mean()-Y
+55. fBodyAccJerk-mean()-Z
+56. fBodyAccJerk-std()-X
+57. fBodyAccJerk-std()-Y
+58. fBodyAccJerk-std()-Z
+59. fBodyAccJerk-meanFreq()-X
+60. fBodyAccJerk-meanFreq()-Y
+61. fBodyAccJerk-meanFreq()-Z
+62. fBodyGyro-mean()-X
+63. fBodyGyro-mean()-Y
+64. fBodyGyro-mean()-Z
+65. fBodyGyro-std()-X
+66. fBodyGyro-std()-Y
+67. fBodyGyro-std()-Z
+68. fBodyGyro-meanFreq()-X
+69. fBodyGyro-meanFreq()-Y
+70. fBodyGyro-meanFreq()-Z
+71. fBodyAccMag-mean()
+72. fBodyAccMag-std()
+73. fBodyAccMag-meanFreq()
+74. fBodyBodyAccJerkMag-mean()
+75. fBodyBodyAccJerkMag-std()
+76. fBodyBodyAccJerkMag-meanFreq()
+77. fBodyBodyGyroMag-mean()
+78. fBodyBodyGyroMag-std()
+79. fBodyBodyGyroMag-meanFreq()
+80. fBodyBodyGyroJerkMag-mean()
+81. fBodyBodyGyroJerkMag-std()
+82. fBodyBodyGyroJerkMag-meanFreq()
+
